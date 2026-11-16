@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ROGUEPULSE | Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            background: #080d0b;
+            color: #00ff88;
+            font-family: Consolas, monospace;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .header {
+            border: 1px solid #00ff88;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 25px;
+            background: #07140f;
+        }
+
+        .header h1 {
+            letter-spacing: 5px;
+        }
+
+        .panel {
+            border: 1px solid #176b45;
+            background: #101915;
+            padding: 22px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            overflow-wrap: anywhere;
+        }
+
+        .main-navigation {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px;
+            margin: 0 auto 25px;
+            max-width: 1100px;
+            background: #07140f;
+            border: 1px solid #14532d;
+            border-radius: 8px;
+        }
+
+        .main-navigation a {
+            color: #00ff66;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 10px 14px;
+            border: 1px solid #14532d;
+            border-radius: 5px;
+            transition: 0.2s;
+        }
+
+        .main-navigation a:hover,
+        .main-navigation a.active {
+            background: #064e2b;
+            color: #ffffff;
+            border-color: #00ff88;
+        }
+
+        .panel a {
+            color: #00ff88;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .panel a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin: 12px 0;
+            background: #080d0b;
+            color: #00ff88;
+            border: 1px solid #00ff88;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #00ff88;
+            color: #080d0b;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #00cc70;
+        }
+
+        .approved {
+            color: #00ff88;
+        }
+
+        .rejected {
+            color: #ff5555;
+        }
+
+        .muted {
+            color: #8aab99;
+        }
+
+        .page-title {
+            border-bottom: 1px solid #176b45;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+
+        .module-status {
+            color: #d6b65c;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #101a16;
+            color: #d8e8df;
+            font-size: 13px;
+        }
+
+        th {
+            background: #123d2b;
+            color: #00ff99;
+            text-align: left;
+            padding: 12px;
+            border: 1px solid #28523d;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 11px;
+            border: 1px solid #28523d;
+            overflow-wrap: anywhere;
+        }
+
+        .table-row-odd {
+            background: #16251e;
+        }
+
+        .table-row-even {
+            background: #1c2d24;
+        }
+
+        tbody tr:hover {
+            background: #254735;
+        }
+
+        .highlight {
+            color: #00ff99;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            border-top: 1px solid #176b45;
+        }
+
+        .finding-list {
+            padding-left: 20px;
+            color: #d8e8df;
+        }
+
+        .finding-list li {
+            margin-bottom: 9px;
+            overflow-wrap: anywhere;
+        }
+
+        .detail-value {
+            color: #d8e8df;
+        }
+
+        .notice {
+            border-left: 3px solid #d6b65c;
+            padding: 12px;
+            background: #1b2118;
+            color: #d6b65c;
+            margin-top: 15px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,
+                    minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .result-card {
+            background: #07140f;
+            border: 1px solid #176b45;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .result-card strong {
+            display: block;
+            color: #8aab99;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .result-card span {
+            color: #00ff88;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            color: #d8e8df;
+            background: #080d0b;
+            border: 1px solid #28523d;
+            padding: 12px;
+            border-radius: 4px;
+        }
+
+        .section-heading {
+            color: #00ff99;
+            border-bottom: 1px solid #28523d;
+            padding-bottom: 8px;
+            margin-top: 25px;
+        }
+
+        /* REPORT MANAGEMENT */
+
+        .report-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .report-button {
+            display: inline-block;
+            padding: 9px 13px;
+            background: #064e2b;
+            color: #00ff88;
+            border: 1px solid #00ff88;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .report-button:hover {
+            background: #00ff88;
+            color: #080d0b;
+        }
+
+        .report-content {
+            min-height: 200px;
+            max-height: 700px;
+            overflow: auto;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .main-navigation {
+                justify-content: flex-start;
+                gap: 8px;
+            }
+
+            .main-navigation a {
+                font-size: 11px;
+                padding: 9px;
+            }
+
+            .header h1 {
+                font-size: 23px;
+                letter-spacing: 3px;
+            }
+
+            .panel {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- MAIN NAVIGATION -->
+
+    <nav class="main-navigation">
+
+        <a href="/" class="{{ 'active' if active_page == 'overview' else '' }}">
+            OVERVIEW
+        </a>
+
+        <a href="/reconnaissance" class="{{ 'active' if active_page == 'reconnaissance' else '' }}">
+            RECONNAISSANCE
+        </a>
+
+        <a href="/web-analysis" class="{{ 'active' if active_page == 'web-analysis' else '' }}">
+            WEB ANALYSIS
+        </a>
+
+        <a href="/web-analysis-history"
+            class="{{ 'active' if active_page in ['web-analysis-history', 'web-analysis-details'] else '' }}">
+            WEB ANALYSIS HISTORY
+        </a>
+
+        <a href="/history" class="{{ 'active' if active_page in ['history', 'scan-details'] else '' }}">
+            HISTORY
+        </a>
+
+        <a href="/reports" class="{{ 'active' if active_page in ['reports', 'report-view'] else '' }}">
+            REPORTS
+        </a>
+
+    </nav>
+
+
+    <div class="container">
+
+        <!-- PLATFORM HEADER -->
+
+        <div class="header">
+
+            <h1>R O G U E P U L S E</h1>
+
+            <p>CYBERSECURITY PLATFORM</p>
+
+            <p class="muted">
+                Version {{ version }}
+            </p>
+
+        </div>
+
+
+        <!-- OVERVIEW PAGE -->
+
+        {% if active_page == "overview" %}
+
+        <div class="panel">
+
+            <h2 class="page-title">PLATFORM OVERVIEW</h2>
+
+            <p>Welcome to ROGUEPULSE.</p>
+
+            <p>
+                Automated Cybersecurity Learning and
+                Local Laboratory Analysis Platform.
+            </p>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>SYSTEM STATUS</h2>
+
+            <p>Engine: {{ engine_status }}</p>
+
+            <p>Testing scope: LOCAL LABORATORIES ONLY</p>
+
+            <p>Dashboard: ONLINE</p>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>TARGET VALIDATION</h2>
+
+            <form method="POST" action="/">
+
+                <label for="target">
+                    Enter a local laboratory URL:
+                </label>
+
+                <input type="text" id="target" name="target" placeholder="http://127.0.0.1:8000" value="{{ target }}"
+                    required>
+
+                <button type="submit">
+                    VALIDATE TARGET
+                </button>
+
+            </form>
+
+            {% if result %}
+
+            <h3 class="{{ 'approved' if result.status == 'APPROVED' else 'rejected' }}">
+                {{ result.status }}
+            </h3>
+
+            <p>{{ result.message }}</p>
+
+            {% endif %}
+
+        </div>
+
+        <div class="panel">
+
+            <h2>PLATFORM MODULES</h2>
+
+            <p>[01] Reconnaissance</p>
+            <p>[02] Web Analysis</p>
+            <p>[03] Vulnerability Testing</p>
+            <p>[04] Laboratory Testing</p>
+
+        </div>
+
+
+        <!-- RECONNAISSANCE PAGE -->
+
+        {% elif active_page == "reconnaissance" %}
+
+        <div class="panel">
+
+            <h2 class="page-title">RECONNAISSANCE</h2>
+
+            <p>
+                Perform HTTP metadata analysis on approved
+                local laboratory targets.
+            </p>
+
+            <p class="module-status">
+                MODULE STATUS: READY
+            </p>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>START RECONNAISSANCE</h2>
+
+            <form method="POST" action="/reconnaissance">
+
+                <label for="target">
+                    Local laboratory URL:
+                </label>
+
+                <input type="text" id="target" name="target" placeholder="http://127.0.0.1:8000" value="{{ target }}"
+                    required>
+
+                <button type="submit">
+                    RUN RECONNAISSANCE
+                </button>
+
+            </form>
+
+        </div>
+
+        {% if recon_error %}
+
+        <div class="panel">
+
+            <h2 class="rejected">ANALYSIS ERROR</h2>
+
+            <p>{{ recon_error }}</p>
+
+        </div>
+
+        {% endif %}
+
+        {% if recon_result %}
+
+        <div class="panel">
+
+            <h2 class="approved">RECONNAISSANCE RESULTS</h2>
+
+            <p>
+                <strong>Target:</strong>
+                {{ recon_result.target }}
+            </p>
+
+            <p>
+                <strong>HTTP Status:</strong>
+                {{ recon_result.status_code }}
+            </p>
+
+            <p>
+                <strong>Response Time:</strong>
+                {{ recon_result.response_time_ms }} ms
+            </p>
+
+            <p>
+                <strong>HTTP Version:</strong>
+                {{ recon_result.http_version }}
+            </p>
+
+            <p>
+                <strong>Server:</strong>
+                {{ recon_result.server }}
+            </p>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>SECURITY HEADERS PRESENT</h2>
+
+            {% for header in recon_result.headers_present %}
+
+            <p class="approved">
+                [+] {{ header }}
+            </p>
+
+            {% else %}
+
+            <p class="muted">
+                No listed security headers were detected.
+            </p>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="panel">
+
+            <h2>SECURITY HEADERS MISSING</h2>
+
+            {% for header in recon_result.headers_missing %}
+
+            <p class="rejected">
+                [-] {{ header }}
+            </p>
+
+            {% else %}
+
+            <p class="approved">
+                All listed security headers were detected.
+            </p>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="panel">
+
+            <h2>SCAN COMPLETED</h2>
+
+            <p class="approved">
+                Reconnaissance results have been saved to the database.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- SCAN DETAILS PAGE -->
+
+        {% elif active_page == "scan-details" %}
+
+        <div class="panel">
+
+            <h2 class="page-title">SCAN DETAILS</h2>
+
+            {% if scan_record %}
+
+            <p class="module-status">
+                RECORD RETRIEVED SUCCESSFULLY
+            </p>
+
+            <h3>
+                RECONNAISSANCE RECORD #{{ scan_record[0] }}
+            </h3>
+
+            <div class="table-container">
+
+                <table>
+
+                    <tr>
+                        <th>Target</th>
+                        <td>{{ scan_record[1] }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>HTTP Status</th>
+                        <td>{{ scan_record[2] }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Response Time</th>
+                        <td>{{ scan_record[3] }} ms</td>
+                    </tr>
+
+                    <tr>
+                        <th>Server</th>
+                        <td>{{ scan_record[4] }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Scan Date</th>
+                        <td>{{ scan_record[5] }}</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <p class="module-status">
+                NO RECORD FOUND FOR SCAN ID {{ scan_id }}.
+            </p>
+
+            {% endif %}
+
+            <p>
+                <a href="/history">
+                    BACK TO HISTORY
+                </a>
+            </p>
+
+        </div>
+
+
+        <!-- WEB ANALYSIS PAGE -->
+
+        {% elif active_page == "web-analysis" %}
+
+        <div class="panel">
+
+            <h2 class="page-title">WEB ANALYSIS MODULE</h2>
+
+            <p>
+                Examine the structure and security headers
+                of local laboratory web pages.
+            </p>
+
+            <p class="module-status">
+                MODULE STATUS: READY
+            </p>
+
+            <p>Available analysis capabilities:</p>
+
+            <ul>
+                <li>HTML structure analysis</li>
+                <li>Forms and input counting</li>
+                <li>Links and images counting</li>
+                <li>Script detection</li>
+                <li>Page metadata inspection</li>
+                <li>Security header analysis</li>
+                <li>Cookie security observations</li>
+                <li>Response status inspection</li>
+            </ul>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>START WEB ANALYSIS</h2>
+
+            <form method="POST" action="/web-analysis">
+
+                <label for="web-target">
+                    Local laboratory URL:
+                </label>
+
+                <input type="text" id="web-target" name="target" placeholder="http://127.0.0.1:8000"
+                    value="{{ target }}" required>
+
+                <button type="submit">
+                    RUN WEB ANALYSIS
+                </button>
+
+            </form>
+
+            <p class="muted">
+                Only localhost laboratory targets are permitted.
+            </p>
+
+        </div>
+
+        {% if web_error %}
+
+        <div class="panel">
+
+            <h2 class="rejected">WEB ANALYSIS ERROR</h2>
+
+            <p>{{ web_error }}</p>
+
+        </div>
+
+        {% endif %}
+
+        {% if web_result %}
+
+        <div class="panel">
+
+            <h2 class="approved">WEB ANALYSIS COMPLETED</h2>
+
+            <p class="approved">
+                Results were successfully saved to the database.
+            </p>
+
+            <p>
+                <strong>Target:</strong>
+                {{ web_result.target }}
+            </p>
+
+            <p>
+                <strong>HTTP Status:</strong>
+                {{ web_result.status_code }}
+            </p>
+
+            <p>
+                <strong>Content Type:</strong>
+                {{ web_result.content_type }}
+            </p>
+
+            <p>
+                <strong>Content Length:</strong>
+                {{ web_result.content_length }} bytes
+            </p>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>HTML STRUCTURE</h2>
+
+            <div class="result-grid">
+
+                <div class="result-card">
+                    <strong>FORMS</strong>
+                    <span>{{ web_result.forms }}</span>
+                </div>
+
+                <div class="result-card">
+                    <strong>INPUTS</strong>
+                    <span>{{ web_result.inputs }}</span>
+                </div>
+
+                <div class="result-card">
+                    <strong>LINKS</strong>
+                    <span>{{ web_result.links }}</span>
+                </div>
+
+                <div class="result-card">
+                    <strong>IMAGES</strong>
+                    <span>{{ web_result.images }}</span>
+                </div>
+
+                <div class="result-card">
+                    <strong>SCRIPTS</strong>
+                    <span>{{ web_result.scripts }}</span>
+                </div>
+
+            </div>
+
+            <h3 class="section-heading">PAGE INFORMATION</h3>
+
+            <p>
+                <strong>Page Title:</strong>
+                {{ web_result.page_title or "Not detected" }}
+            </p>
+
+            <p>
+                <strong>Title Found:</strong>
+                {{ "Yes" if web_result.title_found else "No" }}
+            </p>
+
+            <p>
+                <strong>Meta Description:</strong>
+                {{ web_result.meta_description or "Not detected" }}
+            </p>
+
+            <p>
+                <strong>Meta Generator:</strong>
+                {{ web_result.meta_generator or "Not detected" }}
+            </p>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>SECURITY HEADERS PRESENT</h2>
+
+            {% for header in web_result.headers_present %}
+
+            <p class="approved">
+                [+] {{ header }}
+            </p>
+
+            {% else %}
+
+            <p class="muted">
+                No listed security headers were detected.
+            </p>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="panel">
+
+            <h2>SECURITY HEADERS MISSING</h2>
+
+            {% for header in web_result.headers_missing %}
+
+            <p class="rejected">
+                [-] {{ header }}
+            </p>
+
+            {% else %}
+
+            <p class="approved">
+                All listed security headers were detected.
+            </p>
+
+            {% endfor %}
+
+            <div class="notice">
+                Missing headers are observations for review.
+                They do not independently establish that a vulnerability exists.
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>COOKIE SECURITY REVIEW</h2>
+
+            {% if web_result.cookie_security %}
+
+            <pre>{{ web_result.cookie_security | tojson(indent=2) }}</pre>
+
+            {% else %}
+
+            <p class="muted">
+                No cookies were returned.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+        <div class="panel">
+
+            <h2>RESPONSE STATUS</h2>
+
+            <p>
+                <strong>Content Truncated:</strong>
+                {{ "Yes" if web_result.content_truncated else "No" }}
+            </p>
+
+            <p>
+                <strong>Redirect Detected:</strong>
+                {{ "Yes" if web_result.redirect_detected else "No" }}
+            </p>
+
+            <p>
+                <strong>Redirect Location Present:</strong>
+                {{ "Yes" if web_result.redirect_location_present else "No" }}
+            </p>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>DATABASE STATUS</h2>
+
+            <p class="approved">
+                Analysis record saved successfully.
+            </p>
+
+            <p>
+                <a href="{{ url_for('web_analysis_history_page') }}">
+                    VIEW WEB ANALYSIS HISTORY
+                </a>
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- WEB ANALYSIS HISTORY PAGE -->
+
+        {% elif active_page == "web-analysis-history" %}
+
+        <div class="panel">
+
+            <h2 class="page-title">WEB ANALYSIS HISTORY</h2>
+
+            <p>
+                Review previously saved web-analysis records.
+            </p>
+
+            <p class="module-status">
+                <span class="approved">●</span>
+                MODULE STATUS: DATABASE CONNECTED
+            </p>
+
+            {% if web_history %}
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>TARGET</th>
+                            <th>HTTP STATUS</th>
+                            <th>CONTENT TYPE</th>
+                            <th>CONTENT LENGTH</th>
+                            <th>FORMS</th>
+                            <th>INPUTS</th>
+                            <th>LINKS</th>
+                            <th>IMAGES</th>
+                            <th>SCRIPTS</th>
+                            <th>ANALYSIS DATE</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for record in web_history %}
+
+                        <tr class="{{ 'table-row-odd' if loop.index is odd else 'table-row-even' }}">
+
+                            <td class="highlight">
+                                <a href="{{ url_for(
+                                    'web_analysis_details_page',
+                                    analysis_id=record[0]
+                                ) }}">
+                                    VIEW #{{ record[0] }}
+                                </a>
+                            </td>
+
+                            <td>{{ record[1] }}</td>
+                            <td class="highlight">{{ record[2] }}</td>
+                            <td>{{ record[3] }}</td>
+                            <td>{{ record[4] }}</td>
+                            <td>{{ record[5] }}</td>
+                            <td>{{ record[6] }}</td>
+                            <td>{{ record[7] }}</td>
+                            <td>{{ record[8] }}</td>
+                            <td>{{ record[9] }}</td>
+                            <td>{{ record[10] }}</td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <p class="module-status">
+                NO SAVED WEB ANALYSIS RECORDS FOUND.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- WEB ANALYSIS DETAILS PAGE -->
+
+        {% elif active_page == "web-analysis-details" %}
+
+        <div class="panel">
+
+            <h2 class="page-title">WEB ANALYSIS DETAILS</h2>
+
+            <p>
+                Detailed information for saved analysis record
+                #{{ analysis_id }}.
+            </p>
+
+            {% if analysis_details %}
+
+            <p class="module-status">
+                RECORD RETRIEVED SUCCESSFULLY
+            </p>
+
+            <h3 class="section-heading">ANALYSIS INFORMATION</h3>
+
+            <div class="table-container">
+
+                <table>
+
+                    <tbody>
+
+                        <tr>
+                            <th>ANALYSIS ID</th>
+                            <td>{{ analysis_details.id }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>TARGET</th>
+                            <td>{{ analysis_details.target }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>HTTP STATUS</th>
+                            <td>{{ analysis_details.status_code }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>CONTENT TYPE</th>
+                            <td>{{ analysis_details.content_type }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>CONTENT LENGTH</th>
+                            <td>{{ analysis_details.content_length }} bytes</td>
+                        </tr>
+
+                        <tr>
+                            <th>ANALYSIS DATE</th>
+                            <td>{{ analysis_details.analysis_date }}</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <h3 class="section-heading">HTML STRUCTURE</h3>
+
+            <div class="result-grid">
+
+                <div class="result-card">
+                    <strong>FORMS</strong>
+                    <span>{{ analysis_details.forms }}</span>
+                </div>
+
+                <div class="result-card">
+                    <strong>INPUTS</strong>
+                    <span>{{ analysis_details.inputs }}</span>
+                </div>
+
+                <div class="result-card">
+                    <strong>LINKS</strong>
+                    <span>{{ analysis_details.links }}</span>
+                </div>
+
+                <div class="result-card">
+                    <strong>IMAGES</strong>
+                    <span>{{ analysis_details.images }}</span>
+                </div>
+
+                <div class="result-card">
+                    <strong>SCRIPTS</strong>
+                    <span>{{ analysis_details.scripts }}</span>
+                </div>
+
+            </div>
+
+            <h3 class="section-heading">PAGE METADATA</h3>
+
+            <p>
+                <strong>Page Title:</strong>
+                {{ analysis_details.page_title or "Not detected" }}
+            </p>
+
+            <p>
+                <strong>Title Found:</strong>
+                {{ "Yes" if analysis_details.title_found else "No" }}
+            </p>
+
+            <p>
+                <strong>Meta Description:</strong>
+                {{ analysis_details.meta_description or "Not detected" }}
+            </p>
+
+            <p>
+                <strong>Meta Generator:</strong>
+                {{ analysis_details.meta_generator or "Not detected" }}
+            </p>
+
+            <h3 class="section-heading">SECURITY HEADERS PRESENT</h3>
+
+            {% for header in analysis_details.headers_present %}
+
+            <p class="approved">
+                [+] {{ header }}
+            </p>
+
+            {% else %}
+
+            <p class="muted">
+                No listed security headers were recorded.
+            </p>
+
+            {% endfor %}
+
+            <h3 class="section-heading">SECURITY HEADERS MISSING</h3>
+
+            {% for header in analysis_details.headers_missing %}
+
+            <p class="rejected">
+                [-] {{ header }}
+            </p>
+
+            {% else %}
+
+            <p class="approved">
+                All listed security headers were detected.
+            </p>
+
+            {% endfor %}
+
+            <div class="notice">
+                Missing security headers are observations for review.
+                They do not independently establish that a vulnerability exists.
+            </div>
+
+            <h3 class="section-heading">COOKIE SECURITY REVIEW</h3>
+
+            {% if analysis_details.cookie_security %}
+
+            <pre>{{ analysis_details.cookie_security | tojson(indent=2) }}</pre>
+
+            {% else %}
+
+            <p class="muted">
+                No cookie observations were recorded.
+            </p>
+
+            {% endif %}
+
+            <h3 class="section-heading">RESPONSE STATUS</h3>
+
+            <p>
+                <strong>Content Truncated:</strong>
+                {{ "Yes" if analysis_details.content_truncated else "No" }}
+            </p>
+
+            <p>
+                <strong>Redirect Detected:</strong>
+                {{ "Yes" if analysis_details.redirect_detected else "No" }}
+            </p>
+
+            <p>
+                <strong>Redirect Location Present:</strong>
+                {{ "Yes" if analysis_details.redirect_location_present else "No" }}
+            </p>
+
+            {% else %}
+
+            <p class="module-status">
+                ANALYSIS RECORD NOT FOUND OR COULD NOT BE PROCESSED.
+            </p>
+
+            {% endif %}
+
+            {% if recon_error %}
+
+            <p class="rejected">
+                {{ recon_error }}
+            </p>
+
+            {% endif %}
+
+            <p>
+                <a href="{{ url_for('web_analysis_history_page') }}">
+                    ← BACK TO WEB ANALYSIS HISTORY
+                </a>
+            </p>
+
+        </div>
+
+
+        <!-- RECONNAISSANCE HISTORY PAGE -->
+
+        {% elif active_page == "history" %}
+
+        <div class="panel">
+
+            <h2 class="page-title">ANALYSIS HISTORY</h2>
+
+            <p>
+                Review previously saved ROGUEPULSE
+                reconnaissance records.
+            </p>
+
+            <p class="module-status">
+                MODULE STATUS: DATABASE CONNECTED
+            </p>
+
+            <h3>RECONNAISSANCE HISTORY</h3>
+
+            {% if recon_history %}
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>SCAN ID</th>
+                            <th>TARGET</th>
+                            <th>HTTP STATUS</th>
+                            <th>RESPONSE TIME</th>
+                            <th>SERVER</th>
+                            <th>SCAN DATE</th>
+                            <th>ACTION</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for scan in recon_history %}
+
+                        <tr class="{{ 'table-row-odd' if loop.index is odd else 'table-row-even' }}">
+
+                            <td class="highlight">{{ scan[0] }}</td>
+                            <td>{{ scan[1] }}</td>
+                            <td>{{ scan[2] }}</td>
+                            <td>{{ scan[3] }} ms</td>
+                            <td>{{ scan[4] }}</td>
+                            <td>{{ scan[5] }}</td>
+
+                            <td>
+                                <a href="{{ url_for(
+                                    'scan_details_page',
+                                    scan_id=scan[0]
+                                ) }}">
+                                    VIEW DETAILS
+                                </a>
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <p class="module-status">
+                NO SAVED RECONNAISSANCE RECORDS FOUND.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- REPORT MANAGEMENT PAGE -->
+
+        {% elif active_page == "reports" %}
+
+        <div class="panel">
+
+            <h2 class="page-title">REPORT MANAGEMENT</h2>
+
+            <p>
+                Manage generated ROGUEPULSE analysis reports.
+            </p>
+
+            <p class="module-status">
+                MODULE STATUS:
+                <span class="approved">REPORT MANAGEMENT ONLINE</span>
+            </p>
+
+            <p>
+                Reports are generated through the CLI and stored
+                in the project's reports directory.
+            </p>
+
+            <div class="result-grid">
+
+                <div class="result-card">
+                    <strong>AVAILABLE REPORTS</strong>
+                    <span>{{ reports_list | length }}</span>
+                </div>
+
+                <div class="result-card">
+                    <strong>REPORT FORMAT</strong>
+                    <span>TXT</span>
+                </div>
+
+                <div class="result-card">
+                    <strong>STORAGE</strong>
+                    <span>LOCAL</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>GENERATED REPORTS</h2>
+
+            {% if reports_list %}
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>REPORT ID</th>
+                            <th>FILENAME</th>
+                            <th>GENERATED</th>
+                            <th>FILE SIZE</th>
+                            <th>ACTIONS</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for report in reports_list %}
+
+                        <tr class="{{ 'table-row-odd' if loop.index is odd else 'table-row-even' }}">
+
+                            <td class="highlight">
+                                #{{ report.id }}
+                            </td>
+
+                            <td>
+                                {{ report.filename }}
+                            </td>
+
+                            <td>
+                                {{ report.generated }}
+                            </td>
+
+                            <td>
+                                {{ report.size }} bytes
+                            </td>
+
+                            <td>
+
+                                <div class="report-actions">
+
+                                    <a class="report-button" href="{{ url_for(
+                                            'view_report_page',
+                                            filename=report.filename
+                                        ) }}">
+                                        VIEW
+                                    </a>
+
+                                    <a class="report-button" href="{{ url_for(
+                                            'download_report',
+                                            filename=report.filename
+                                        ) }}">
+                                        DOWNLOAD
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <p class="module-status">
+                NO GENERATED REPORTS FOUND.
+            </p>
+
+            <div class="notice">
+                No report files are currently available.
+
+                Run a web analysis and use CLI option 9
+                to export a report. Then refresh this page.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- INDIVIDUAL REPORT VIEW PAGE -->
+
+        {% elif active_page == "report-view" %}
+
+        <div class="panel">
+
+            <h2 class="page-title">REPORT VIEWER</h2>
+
+            <p class="module-status">
+                REPORT RETRIEVED SUCCESSFULLY
+            </p>
+
+            <p>
+                <strong>Filename:</strong>
+                {{ report_filename }}
+            </p>
+
+            <div class="report-actions">
+
+                <a class="report-button" href="{{ url_for(
+                        'download_report',
+                        filename=report_filename
+                    ) }}">
+                    DOWNLOAD REPORT
+                </a>
+
+                <a class="report-button" href="{{ url_for('reports_page') }}">
+                    BACK TO REPORTS
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>REPORT CONTENT</h2>
+
+            <pre class="report-content">{{ report_content }}</pre>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+
+            <p class="muted">
+                ROGUEPULSE | Local educational environment
+            </p>
+
+            <p class="muted">
+                Authorized local laboratory testing only.
+            </p>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
