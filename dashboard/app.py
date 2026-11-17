@@ -301,6 +301,22 @@ def dashboard():
             "latest_activity": None
         }
 
+    # Retrieve dashboard analytics
+    try:
+
+        dashboard_analytics = database.get_dashboard_analytics()
+
+    except Exception:
+
+        logger.exception(
+            "Unable to retrieve dashboard analytics."
+        )
+
+        dashboard_analytics = {
+            "activity_trends": [],
+            "recent_activity": []
+        }
+
     # Render dashboard
     return render_template(
         "index.html",
@@ -308,7 +324,8 @@ def dashboard():
             result=result,
             target=target,
             active_page="overview",
-            dashboard_statistics=dashboard_statistics
+            dashboard_statistics=dashboard_statistics,
+            dashboard_analytics=dashboard_analytics
         )
     )
 

@@ -278,4 +278,91 @@ class RoguePulseDatabase:
                 "total_web_analyses": total_web_analyses,
                 "latest_activity": latest_activity
             }
-    
+
+    def get_dashboard_analytics(self):
+        """Retrieve seven-day activity trends and recent activity."""
+
+        with self.connect() as connection:
+            cursor = connection.cursor()
+
+            # Generate the last seven calender days.
+            # Include days with zero recorded activity.
+
+            cursor.execute("""
+                WITH RECURSIVE dates(day) AS(
+                    SELECT date('now', '-6 days')
+
+                    UNION ALL
+
+                    SELECT date(day, '+1 day')
+                    FROM dates
+                    WHERE day < date('now')
+                ),
+
+                daily_activity AS(
+                    SELECT
+                        date(scan_date) AS activity_day,
+                        COUNT(*) AS reconnaissance_count,
+                        0 AS web_analysis_count
+                    FROM reconnaissance
+                    WHERE date(scan_date) >= date('now', '-6 days')
+                    GROUP BY date(scan_date)
+
+                    UNION ALL
+
+                    SELECT
+                        date(analysis_date) AS activity_day,
+                        0 AS reconnaissance_count,
+                        COUNT(*) AS web_analysis_count
+                    FROM web_analysis
+                    WHERE date(analysis_date) >= date('now', '-6 days')
+                    GROUP BY date(analysis_date)        
+                )
+
+                SELECT
+                    dates.day,
+                    COALESCE(SUM(daily_activity.reconnaissance_count), 0),
+                    COALESCE(SUM(daily_activity.web_analysis_count), 0)
+
+                FROM dates
+
+                LEFT JOIN daily_activity
+                    ON dates.day = daily_activity.activity_day
+
+                GROUP BY dates.day
+                ORDER BY dates.day ASC        
+            """)
+
+            activity_trends = cursor.fetchall()
+
+            # Retrieve the ten most recent activities.
+            cursor.execute("""
+                SELECT activity_type, target, activity_date
+                FROM(
+                    SELECT
+                        'Reconnaissance' AS activity_type,
+                        target,
+                        scan_date AS activity_date,
+                        id
+                    FROM reconnaissance
+
+                    UNION ALL
+
+                    SELECT
+                        'Web Analysis' AS activity_type,
+                        target,
+                        analysis_date AS activity_date,
+                        id
+                    FROM web_analysis        
+                )
+
+                ORDER BY activity_date DESC, id DESC
+                LIMIT 10
+            """)
+
+            recent_activity = cursor.fetchall()
+
+            return {
+                "activity_trends": activity_trends,
+                "recent_activity": recent_activity
+            }
