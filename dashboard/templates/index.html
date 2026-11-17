@@ -595,6 +595,122 @@
             font-size: 19px;
         }
 
+        .analytics-panel {
+            overflow: hidden;
+        }
+
+        .analytics-summary {
+            margin: 20px 0;
+        }
+
+        .analytics-chart-panel,
+        .analytics-table {
+            margin-top: 18px;
+        }
+
+        .analytics-total {
+            text-align: right;
+        }
+
+        .analytics-total strong,
+        .analytics-total small {
+            display: block;
+        }
+
+        .analytics-total strong {
+            color: var(--green-bright);
+            font-size: 24px;
+        }
+
+        .analytics-total small {
+            color: var(--muted);
+            font-size: 9px;
+            letter-spacing: .1em;
+        }
+
+        .analytics-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 18px 0 12px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .legend-recon {
+            color: var(--green-bright);
+        }
+
+        .legend-web {
+            color: var(--amber);
+        }
+
+        .analytics-chart {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 12px;
+        }
+
+        .analytics-day {
+            min-width: 0;
+            padding: 13px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .018);
+        }
+
+        .analytics-day-heading,
+        .analytics-day-footer {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .analytics-day-heading strong {
+            color: var(--text);
+        }
+
+        .analytics-bars {
+            display: grid;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .analytics-bar-track {
+            height: 8px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: rgba(145, 169, 154, .12);
+        }
+
+        .analytics-bar {
+            height: 100%;
+            min-width: 0;
+            border-radius: 20px;
+        }
+
+        .analytics-bar-recon {
+            background: linear-gradient(90deg, #1faa69, var(--green-bright));
+        }
+
+        .analytics-bar-web {
+            background: linear-gradient(90deg, #a9873d, var(--amber));
+        }
+
+        .analytics-day-footer {
+            flex-wrap: wrap;
+        }
+
+        .analytics-table {
+            padding: 0;
+        }
+
+        .analytics-table .overview-intro {
+            padding: 18px;
+        }
+
         @media (max-width: 900px) {
             body {
                 padding: 22px 16px;
@@ -670,6 +786,204 @@
 
             .activity-date {
                 text-align: left;
+            }
+        }
+
+        /* ===================================================
+           DEVELOPMENT 28.5.2 -- ANALYTICS REFINMENT
+           ==================================================*/
+
+        .analytics-panel {
+            padding: 26px;
+        }
+
+        .analytics-panel.result-grid,
+        .analytics-summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin: 20px 0 24px;
+        }
+
+        .analytics-panel.result-card {
+            min-width: 0;
+            padding: 19px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: linear-gradient(145deg,
+                    rgba(20, 40, 28, .95),
+                    rgba(12, 24, 17, .95));
+        }
+
+        .analytics-chart-panel {
+            padding: 22px;
+            margin: 22px 0;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: rgba(7, 17, 11, .55);
+        }
+
+        .analytics-total {
+            color: var(--green-bright);
+            font-size: 13px;
+            font-weight: 750;
+            letter-spacing: 08em;
+        }
+
+        .analytics-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin: 16px 0 22px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .analytics-chart {
+            display: grid;
+            gap: 17px;
+        }
+
+        .analytics-day {
+            display: grid;
+            grid-template-columns: minmax(95px, 125px) minmax(0, 1fr);
+            align-items: center;
+            gap: 16px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(91, 180, 128, .10);
+        }
+
+        .analytics-day-heading {
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .analytics-bars {
+            display: grid;
+            gap: 7px;
+            min-width: 0;
+        }
+
+        .analytics-bar-track {
+            width: 100%;
+            height: 11px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, .06);
+        }
+
+        .analytics-bar {
+            height: 100%;
+            min-width: 0;
+            border-radius: 20px;
+            transition: width .35s ease;
+        }
+
+        .analytics-bar-recon {
+            background: linear-gradient(90deg, #168d55, var(--green));
+        }
+
+        .analytics-bar-web {
+            background: linear-gradient(90deg, #a9873d, var(--amber));
+        }
+
+        .analytics-day-footer {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .analytics-table {
+            margin-top: 22px;
+            overflow-x: auto;
+        }
+
+        .analytics-table table {
+            width: 100%;
+            min-width: 520px;
+            border-collapse: collapse;
+        }
+
+        .analytics-table th,
+        .analytics-table td {
+            padding: 13px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .analytics-table th {
+            color: var(--green-bright);
+            font-size: 11px;
+            letter-spacing: .08em;
+            text-align: center;
+        }
+
+        .analytics-table td {
+            color: var(--text);
+            font-size: 13px;
+        }
+
+        .analytics-table tfoot td {
+            color: var(--green-bright);
+            font-weight: 750;
+            border-top: 1px solid var(--border-strong);
+        }
+
+        /* Table layout */
+        @media(max-width: 900px) {
+
+            .analytics-panel.result-grid,
+            .analytics-summary {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .analytics-chart-panel {
+                padding: 18px;
+            }
+        }
+
+        /* Mobile layout */
+        @media(max-width: 600px) {
+            .analytics-panel {
+                padding: 16px;
+            }
+
+            .analytics-panel.result-grid,
+            .analytics-summary {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .analytics-panel.result-card {
+                padding: 15px;
+            }
+
+            .analytics-chart-panel {
+                padding: 14px;
+            }
+
+            .analytics-day {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .analytics-day-heading {
+                font-size: 11px;
+            }
+
+            .analytics-legend {
+                gap: 10px;
+                font-size: 11px;
+            }
+
+            .analytics-day-footer {
+                font-size: 10px;
             }
         }
     </style>
@@ -764,7 +1078,8 @@
         </div>
 
         <!-- SEVEN-DAY ACTIVITY ANALYTICS -->
-        <div class="panel">
+        <div class="panel analytics-panel">
+
             <div class="overview-intro">
                 <div>
                     <div class="eyebrow">Analytics / Activity monitoring</div>
@@ -791,130 +1106,154 @@
             {% endif %}
             {% endfor %}
 
-            {% if max_activity.value < 1 %}
-            {% set max_activity.value = 1 %}
-            {% endif %}
+            {% if max_activity.value < 1 %} {% set max_activity.value=1 %} {% endif %} {% set
+                grand_total=activity_totals.recon + activity_totals.web %} <!-- ANALYTICS SUMMARY -->
 
-            <div class="result-grid">
-                <div class="result-card">
-                    <strong>RECONNAISSANCE</strong>
-                    <span>{{ activity_totals.recon }}</span>
+                <div class="result-grid analytics-summary">
+
+                    <div class="result-card">
+                        <strong>SEVEN-DAY TOTAL</strong>
+                        <span>{{ grand_total }}</span>
+                        <small class="muted">All recorded activities</small>
+                    </div>
+
+                    <div class="result-card">
+                        <strong>RECONNAISSANCE</strong>
+                        <span>{{ activity_totals.recon }}</span>
+                        <small>Total reconnaissance operations</small>
+                    </div>
+
+                    <div class="result-card">
+                        <strong>WEB ANALYSIS</strong>
+                        <span>{{ activity_totals.web }}</span>
+                        <small class="muted">Total web analysis operations</small>
+                    </div>
                 </div>
 
-                <div class="result-card">
-                    <strong>WEB ANALYSIS</strong>
-                    <span>{{ activity_totals.web }}</span>
-                </div>
-            </div>
+                <!-- ACTIVITY DISTRIBUTION -->
+                <div class="panel analytics-chart-panel">
 
-            <!-- GRAPHICAL ACTIVITY CHART-->
-
-            <div class="panel" style="margin-top: 25px; background: rgba(10, 20, 16, 0.65);">
-
-                <h3>ACTIVITY DISTRIBUTION</h3>
-
-                <p class="muted">
-                    Daily comparison of reconnaissance and web analysis.
-                </p>
-
-                <div style="display: flex; gap: 20px; margin: 20px 0; flex-wrap: wrap;">
-
-                    <span style="color: #00e676;">
-                        ■ Reconnaissance
-                    </span>
-
-                    <span style="color: #35a7ff;">
-                        ■ Web Analysis
-                    </span>
-
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 20px;">
-                    {% for day, recon_count, web_count in dashboard_analytics.activity_trends %}
-
-                    <div>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; gap: 10px;">
-
-                            <strong>{{day}}</strong>
-
-                            <span class="muted">
-                                Total: {{ recon_count + web_count }}
-                            </span>
+                    <div class="overview-intro">
+                        <div>
+                            <div class="eyebrow">Performance / Daily comparison</div>
+                            <h3>ACTIVITY DISTRIBUTION</h3>
+                            <p>Daily comparison of reconnaissance and web analysis.</p>
                         </div>
 
-                        <div style="display: flex; flex-direction: column; gap: 7px;">
-
-                            <div
-                                style="background: #17251e; width: 100%; height: 12px; border-radius: 10px; overflow: hidden;">
-
-                                {% set recon_width = (recon_count / max_activity.value * 100) | round(2) %}
-                                <div role="progressbar"
-                                    aria-label="{{ recon_count }} reconnaissance activities"
-                                    aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ recon_width }}"
-                                    style="
-                                    width: {{ recon_width if recon_width > 0 else 0 }}%;
-                                    height: 100%;
-                                    background: #00e676;
-                                    border-radius: 10px;
-                                    "></div>
-                            </div>
-
-                            <div
-                                style="background: #17251e; width: 100%; height: 12px; border-radius: 10px; overflow: hidden;">
-
-                                {% set web_width = (web_count / max_activity.value * 100) | round(2) %}
-                                <div role="progressbar"
-                                    aria-label="{{ web_count }} web analysis activities"
-                                    aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ web_width }}"
-                                    style="
-                                    width: {{ web_width if web_width > 0 else 0 }}%;
-                                    height: 100%;
-                                    background: #35a7ff;
-                                    border-radius: 10px;
-                                    "></div>
-                            </div>
-                        </div>
-
-                        <div
-                            style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 6px; color: #9aafa2;">
-                            <span>Recon: {{ recon_count }}</span>
-
-                            <span>Web: {{ web_count }}</span>
-
+                        <div class="analytics-total">
+                            <strong>{{ grand_total }}</strong>
+                            <small>7-DAY ACTIVITIES</small>
                         </div>
                     </div>
 
-                    {% endfor %}
+                    <div class="analytics-legend">
+                        <span class="legend-recon">■ Reconnaissance</span>
+                        <span class="legend-web">■ Web Analysis</span>
+                    </div>
+
+                    <div class="analytics-chart">
+
+                        {% for day, recon_count, web_count in dashboard_analytics.activity_trends %}
+                        {% set daily_total = recon_count + web_count %}
+                        {% set recon_width = (recon_count / max_activity.value * 100) | round(2) %}
+                        {% set web_width = (web_count / max_activity.value * 100) | round(2) %}
+
+                        <div class="analytics-day">
+
+                            <div class="analytics-day-heading">
+                                <strong>{{ day }}</strong>
+
+                                <span>
+                                    {{ daily_total}} activities
+                                </span>
+                            </div>
+
+                            <div class="analytics-bars">
+
+                                <div class="analytics-bar-track" role="group"
+                                    aria-label="Reconnaissance: {{ recon_count }}">
+
+                                    <div class="analytics-bar analytics-bar-recon" role="progressbar"
+                                        aria-label="Reconnaissance" aria-valuemin="0"
+                                        aria-valuemax="{{ max_activity.value }}" aria-valuenow="{{ recon_count }}"
+                                        style="width: {{recon_width}}%;">
+                                    </div>
+
+                                </div>
+
+                                <div class="analytics-bar-track" role="group"
+                                    aria-label="Web analysis: {{ web_count }}">
+
+                                    <div class="analytics-bar analytics-bar-web" role="progressbar"
+                                        aria-label="Web Analysis" aria-valuemin="0"
+                                        aria-valuemax="{{ max_activity.value }}" aria-valuenow="{{ web_count }}"
+                                        style="width: {{ web_width }}%;">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="analytics-day-footer">
+                                <span>Recon: {{ recon_count }}</span>
+                                <span>Web: {{ web_count }}</span>
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+                <!-- DAILY ACTIVITY TABLE-->
+
+                <div class="table-container analytics-table">
+
+                    <div class="overview-intro">
+                        <div>
+                            <div class="eyebrow">Records / Daily breakdown</div>
+                            <h3>ACTIVITY HISTORY</h3>
+                            <p>Recorded operations for each day.</p>
+                        </div>
+                    </div>
+
+                    <table style="text-align: center;">
+                        <thead>
+                            <tr>
+                                <th>DATE</th>
+                                <th>RECONNAISSANCE</th>
+                                <th>WEB ANALYSIS</th>
+                                <th>DAILY TOTAL</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for day, recon_count, web_count in dashboard_analytics.activity_trends %}
+                            <tr>
+                                <td>{{ day }}</td>
+                                <td>{{ recon_count }}</td>
+                                <td>{{ web_count }}</td>
+                                <td><strong>{{ recon_count + web_count }}</strong></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <th>7-DAY TOTAL</th>
+                                <th>{{ activity_totals.recon }}</th>
+                                <th>{{ activity_totals.web }}</th>
+                                <th>{{ grand_total }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
 
                 </div>
 
-            </div>
+                {% else %}
+                <p class="muted">No activity trend data is currently available.</p>
 
-            <div class="table-container" style="margin-top: 25px;">
-                <table style="text-align: center;">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center !important;">DATE</th>
-                            <th style="text-align: center !important;">RECONNAISSANCE</th>
-                            <th style="text-align: center !important;">WEB ANALYSIS</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for day, recon_count, web_count in dashboard_analytics.activity_trends %}
-                        <tr>
-                            <td>{{day}}</td>
-                            <td>{{recon_count}}</td>
-                            <td>{{web_count}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            {% else %}
-            <p class="muted">No activity trend data is currently available.</p>
-            {% endif %}
+                {% endif %}
 
         </div>
 
