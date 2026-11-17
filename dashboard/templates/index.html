@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -287,6 +288,46 @@
             line-height: 1.6;
         }
 
+        /* DEVELOPMENT 27.1: ANALYSIS INTERPRETATION */
+
+        .interpretation-card {
+            background: #07140f;
+            border: 1px solid #176b45;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 5px;
+        }
+
+        .interpretation-card h3 {
+            color: #00ff99;
+            margin-top: 0;
+        }
+
+        .interpretation-card p {
+            color: #d8e8df;
+            line-height: 1.6;
+        }
+
+        .interpretation-label {
+            color: #8aab99;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .interpretation-value {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .interpretation-warning {
+            border-left: 3px solid #d6b65c;
+            background: #1b2118;
+            color: #d6b65c;
+            padding: 13px;
+            margin-top: 12px;
+            line-height: 1.6;
+        }
+
         @media (max-width: 600px) {
             body {
                 padding: 15px;
@@ -347,7 +388,6 @@
 
     </nav>
 
-
     <div class="container">
 
         <!-- PLATFORM HEADER -->
@@ -363,7 +403,6 @@
             </p>
 
         </div>
-
 
         <!-- OVERVIEW PAGE -->
 
@@ -435,7 +474,6 @@
             <p>[04] Laboratory Testing</p>
 
         </div>
-
 
         <!-- RECONNAISSANCE PAGE -->
 
@@ -574,7 +612,6 @@
 
         {% endif %}
 
-
         <!-- SCAN DETAILS PAGE -->
 
         {% elif active_page == "scan-details" %}
@@ -642,7 +679,6 @@
 
         </div>
 
-
         <!-- WEB ANALYSIS PAGE -->
 
         {% elif active_page == "web-analysis" %}
@@ -671,6 +707,7 @@
                 <li>Security header analysis</li>
                 <li>Cookie security observations</li>
                 <li>Response status inspection</li>
+                <li>Analysis interpretation</li>
             </ul>
 
         </div>
@@ -864,6 +901,116 @@
 
         </div>
 
+        <!-- DEVELOPMENT 27.1: INTERPRETATION PANEL -->
+
+        <div class="panel">
+
+            <h2 class="page-title">ANALYSIS INTERPRETATION</h2>
+
+            <p class="muted">
+                A summary of the observations collected during this analysis.
+            </p>
+
+            <div class="result-grid">
+
+                <div class="interpretation-card">
+
+                    <h3>Security Headers</h3>
+
+                    <p>
+                        <span class="interpretation-label">Detected:</span>
+                        <span class="interpretation-value">
+                            {{ web_result.headers_present | length }}
+                        </span>
+                    </p>
+
+                    <p>
+                        <span class="interpretation-label">Not detected:</span>
+                        <span class="interpretation-value">
+                            {{ web_result.headers_missing | length }}
+                        </span>
+                    </p>
+
+                    {% if web_result.headers_missing %}
+
+                    <p class="module-status">
+                        Some listed security headers were not detected.
+                        Review the missing-header list.
+                    </p>
+
+                    {% else %}
+
+                    <p class="approved">
+                        All listed security headers were detected.
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="interpretation-card">
+
+                    <h3>Cookie Observations</h3>
+
+                    {% if web_result.cookie_security %}
+
+                    <p>
+                        Cookie security observations were recorded.
+                        Review the cookie details above.
+                    </p>
+
+                    {% else %}
+
+                    <p>
+                        No cookie observations were returned by the server.
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="interpretation-card">
+
+                    <h3>Response Conditions</h3>
+
+                    <p>
+                        <span class="interpretation-label">Content truncated:</span>
+                        <span class="interpretation-value">
+                            {{ "Yes" if web_result.content_truncated else "No" }}
+                        </span>
+                    </p>
+
+                    <p>
+                        <span class="interpretation-label">Redirect detected:</span>
+                        <span class="interpretation-value">
+                            {{ "Yes" if web_result.redirect_detected else "No" }}
+                        </span>
+                    </p>
+
+                    <p>
+                        <span class="interpretation-label">Redirect location recorded:</span>
+                        <span class="interpretation-value">
+                            {{ "Yes" if web_result.redirect_location_present else "No" }}
+                        </span>
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="interpretation-warning">
+                INTERPRETATION LIMITATION:
+
+                These results describe observable response characteristics.
+                A missing header, cookie attribute, or response condition
+                does not independently prove that a security vulnerability exists.
+
+                Further authorized review would be needed to establish the
+                security impact of any observation.
+            </div>
+
+        </div>
+
         <div class="panel">
 
             <h2>RESPONSE STATUS</h2>
@@ -902,7 +1049,6 @@
         </div>
 
         {% endif %}
-
 
         <!-- WEB ANALYSIS HISTORY PAGE -->
 
@@ -988,7 +1134,6 @@
             {% endif %}
 
         </div>
-
 
         <!-- WEB ANALYSIS DETAILS PAGE -->
 
@@ -1157,6 +1302,108 @@
 
             {% endif %}
 
+            <!-- DEVELOPMENT 27.1: SAVED ANALYSIS INTERPRETATION -->
+
+            <h3 class="section-heading">ANALYSIS INTERPRETATION</h3>
+
+            <div class="result-grid">
+
+                <div class="interpretation-card">
+
+                    <h3>Security Headers</h3>
+
+                    <p>
+                        <span class="interpretation-label">Detected:</span>
+                        <span class="interpretation-value">
+                            {{ analysis_details.headers_present | length }}
+                        </span>
+                    </p>
+
+                    <p>
+                        <span class="interpretation-label">Not detected:</span>
+                        <span class="interpretation-value">
+                            {{ analysis_details.headers_missing | length }}
+                        </span>
+                    </p>
+
+                    {% if analysis_details.headers_missing %}
+
+                    <p class="module-status">
+                        Some listed security headers were not detected.
+                        Review the recorded observations.
+                    </p>
+
+                    {% else %}
+
+                    <p class="approved">
+                        All listed security headers were detected.
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="interpretation-card">
+
+                    <h3>Cookie Observations</h3>
+
+                    {% if analysis_details.cookie_security %}
+
+                    <p>
+                        Cookie security observations were recorded.
+                        Review the cookie details above.
+                    </p>
+
+                    {% else %}
+
+                    <p>
+                        No cookie observations were recorded.
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="interpretation-card">
+
+                    <h3>Response Conditions</h3>
+
+                    <p>
+                        <span class="interpretation-label">Content truncated:</span>
+                        <span class="interpretation-value">
+                            {{ "Yes" if analysis_details.content_truncated else "No" }}
+                        </span>
+                    </p>
+
+                    <p>
+                        <span class="interpretation-label">Redirect detected:</span>
+                        <span class="interpretation-value">
+                            {{ "Yes" if analysis_details.redirect_detected else "No" }}
+                        </span>
+                    </p>
+
+                    <p>
+                        <span class="interpretation-label">Redirect location recorded:</span>
+                        <span class="interpretation-value">
+                            {{ "Yes" if analysis_details.redirect_location_present else "No" }}
+                        </span>
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="interpretation-warning">
+                INTERPRETATION LIMITATION:
+
+                These results describe observable response characteristics.
+                A missing header, cookie attribute, or response condition
+                does not independently prove that a security vulnerability exists.
+
+                Further authorized review would be needed to establish the
+                security impact of any observation.
+            </div>
+
             <h3 class="section-heading">RESPONSE STATUS</h3>
 
             <p>
@@ -1197,7 +1444,6 @@
             </p>
 
         </div>
-
 
         <!-- RECONNAISSANCE HISTORY PAGE -->
 
@@ -1279,7 +1525,6 @@
             {% endif %}
 
         </div>
-
 
         <!-- REPORT MANAGEMENT PAGE -->
 
@@ -1417,7 +1662,6 @@
 
         </div>
 
-
         <!-- INDIVIDUAL REPORT VIEW PAGE -->
 
         {% elif active_page == "report-view" %}
@@ -1461,7 +1705,6 @@
         </div>
 
         {% endif %}
-
 
         <!-- FOOTER -->
 
