@@ -9,348 +9,266 @@
     <title>ROGUEPULSE | Dashboard</title>
 
     <style>
-        * {
-            box-sizing: border-box;
+        :root {
+            --bg: #080d0b;
+            --surface: #101a15;
+            --surface-raised: #14221b;
+            --surface-soft: #0c1510;
+            --border: rgba(91, 180, 128, .18);
+            --border-strong: rgba(65, 220, 137, .34);
+            --green: #35e68f;
+            --green-bright: #6bffb2;
+            --green-deep: #123d2b;
+            --text: #e8f3ec;
+            --muted: #91a99a;
+            --amber: #e8c875;
+            --red: #ff7777;
+            --shadow: 0 18px 50px rgba(0, 0, 0, .24);
         }
+
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
-            padding: 30px;
-            background: #080d0b;
-            color: #00ff88;
-            font-family: Consolas, monospace;
+            padding: 34px 28px;
+            min-height: 100vh;
+            background:
+                radial-gradient(ellipse at 12% 0%, rgba(22, 112, 69, .18), transparent 35%),
+                radial-gradient(ellipse at 90% 10%, rgba(21, 75, 52, .12), transparent 30%),
+                var(--bg);
+            color: var(--text);
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            line-height: 1.6;
+            letter-spacing: .01em;
         }
 
-        .container {
-            max-width: 1100px;
-            margin: auto;
-        }
+        .container { max-width: 1440px; margin: 0 auto; }
 
         .header {
-            border: 1px solid #00ff88;
-            padding: 25px;
-            text-align: center;
-            margin-bottom: 25px;
-            background: #07140f;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 28px 34px;
+            margin-bottom: 22px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: linear-gradient(115deg, rgba(19, 43, 30, .98), rgba(10, 22, 16, .96));
+            box-shadow: var(--shadow);
+            text-align: left;
+        }
+
+        .header::after {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            right: -80px;
+            top: -170px;
+            border-radius: 50%;
+            background: rgba(53, 230, 143, .10);
+            filter: blur(8px);
         }
 
         .header h1 {
-            letter-spacing: 5px;
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            color: var(--green-bright);
+            font-size: clamp(25px, 4vw, 36px);
+            font-weight: 800;
+            letter-spacing: .22em;
         }
 
-        .panel {
-            border: 1px solid #176b45;
-            background: #101915;
-            padding: 22px;
-            margin-bottom: 20px;
-            border-radius: 6px;
-            overflow-wrap: anywhere;
-        }
+        .header p { position: relative; z-index: 1; margin: 5px 0 0; color: var(--muted); }
+        .header .muted { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
 
         .main-navigation {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 12px;
-            padding: 18px;
-            margin: 0 auto 25px;
-            max-width: 1100px;
-            background: #07140f;
-            border: 1px solid #14532d;
-            border-radius: 8px;
+            align-items: center;
+            gap: 7px;
+            padding: 9px;
+            margin: 0 0 24px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(12, 22, 16, .88);
+            box-shadow: 0 10px 30px rgba(0,0,0,.14);
         }
 
         .main-navigation a {
-            color: #00ff66;
+            color: #a9c0b1;
             text-decoration: none;
-            font-size: 13px;
-            font-weight: bold;
-            padding: 10px 14px;
-            border: 1px solid #14532d;
-            border-radius: 5px;
-            transition: 0.2s;
+            font-size: 11px;
+            font-weight: 750;
+            letter-spacing: .09em;
+            padding: 11px 15px;
+            border: 1px solid transparent;
+            border-radius: 9px;
+            transition: .2s ease;
         }
 
         .main-navigation a:hover,
         .main-navigation a.active {
-            background: #064e2b;
-            color: #ffffff;
-            border-color: #00ff88;
+            color: var(--green-bright);
+            border-color: var(--border-strong);
+            background: rgba(39, 153, 91, .13);
         }
 
-        .panel a {
-            color: #00ff88;
-            text-decoration: none;
-            font-weight: bold;
+        .panel {
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: linear-gradient(145deg, rgba(18, 31, 23, .97), rgba(13, 23, 17, .97));
+            box-shadow: 0 12px 35px rgba(0,0,0,.14);
+            overflow-wrap: anywhere;
         }
 
-        .panel a:hover {
-            color: #ffffff;
-            text-decoration: underline;
+        .panel h2 { margin-top: 0; color: var(--green-bright); font-size: 17px; letter-spacing: .07em; }
+        .panel h3 { color: #c8ead6; }
+        .panel a { color: var(--green-bright); text-decoration: none; font-weight: 650; }
+        .panel a:hover { color: #fff; text-decoration: underline; }
+
+        .page-title {
+            padding-bottom: 13px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-strong);
         }
 
         input {
             width: 100%;
-            padding: 13px;
+            padding: 14px 15px;
             margin: 12px 0;
-            background: #080d0b;
-            color: #00ff88;
-            border: 1px solid #00ff88;
-            border-radius: 4px;
+            border: 1px solid rgba(104, 174, 132, .32);
+            border-radius: 9px;
+            outline: none;
+            background: #09120d;
+            color: var(--text);
+            font: inherit;
+            transition: .2s;
+        }
+
+        input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(53,230,143,.10);
         }
 
         button {
-            padding: 12px 20px;
-            background: #00ff88;
-            color: #080d0b;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
+            padding: 12px 19px;
+            border: 1px solid rgba(107,255,178,.45);
+            border-radius: 9px;
+            background: linear-gradient(135deg, #38d987, #1eaa69);
+            color: #06140c;
+            font: inherit;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .07em;
             cursor: pointer;
+            transition: .2s ease;
         }
 
-        button:hover {
-            background: #00cc70;
-        }
+        button:hover { transform: translateY(-1px); filter: brightness(1.08); box-shadow: 0 8px 22px rgba(35,190,112,.18); }
 
-        .approved {
-            color: #00ff88;
-        }
+        .approved, .highlight { color: var(--green-bright); font-weight: 700; }
+        .rejected { color: var(--red); }
+        .muted { color: var(--muted); }
+        .module-status { color: var(--amber); }
+        .section-heading { color: var(--green-bright); border-bottom: 1px solid var(--border); padding-bottom: 9px; margin-top: 28px; }
 
-        .rejected {
-            color: #ff5555;
-        }
+        .table-container { width: 100%; overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+        table { width: 100%; border-collapse: collapse; background: #0d1711; color: #d9e9df; font-size: 13px; }
+        th { background: #163b29; color: var(--green-bright); text-align: left; padding: 14px; border-bottom: 1px solid var(--border-strong); white-space: nowrap; font-size: 11px; letter-spacing: .07em; }
+        td { padding: 13px 14px; border-bottom: 1px solid rgba(91,180,128,.12); overflow-wrap: anywhere; }
+        .table-row-odd { background: rgba(255,255,255,.012); }
+        .table-row-even { background: rgba(255,255,255,.028); }
+        tbody tr:hover { background: rgba(53,230,143,.07); }
 
-        .muted {
-            color: #8aab99;
-        }
+        .footer { text-align: center; margin-top: 35px; padding: 20px; border-top: 1px solid var(--border); font-size: 12px; }
+        .finding-list { padding-left: 20px; color: #d8e8df; }
+        .finding-list li { margin-bottom: 9px; overflow-wrap: anywhere; }
+        .detail-value { color: var(--text); }
 
-        .page-title {
-            border-bottom: 1px solid #176b45;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
-        }
-
-        .module-status {
-            color: #d6b65c;
-        }
-
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #101a16;
-            color: #d8e8df;
-            font-size: 13px;
-        }
-
-        th {
-            background: #123d2b;
-            color: #00ff99;
-            text-align: left;
-            padding: 12px;
-            border: 1px solid #28523d;
-            white-space: nowrap;
-        }
-
-        td {
-            padding: 11px;
-            border: 1px solid #28523d;
-            overflow-wrap: anywhere;
-        }
-
-        .table-row-odd {
-            background: #16251e;
-        }
-
-        .table-row-even {
-            background: #1c2d24;
-        }
-
-        tbody tr:hover {
-            background: #254735;
-        }
-
-        .highlight {
-            color: #00ff99;
-            font-weight: bold;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding: 15px;
-            border-top: 1px solid #176b45;
-        }
-
-        .finding-list {
-            padding-left: 20px;
-            color: #d8e8df;
-        }
-
-        .finding-list li {
-            margin-bottom: 9px;
-            overflow-wrap: anywhere;
-        }
-
-        .detail-value {
-            color: #d8e8df;
-        }
-
-        .notice {
-            border-left: 3px solid #d6b65c;
-            padding: 12px;
-            background: #1b2118;
-            color: #d6b65c;
+        .notice, .interpretation-warning {
+            padding: 14px 16px;
             margin-top: 15px;
+            border: 1px solid rgba(232,200,117,.20);
+            border-left: 3px solid var(--amber);
+            border-radius: 8px;
+            background: rgba(232,200,117,.07);
+            color: #e8d69d;
+            line-height: 1.65;
         }
 
-        .result-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit,
-                    minmax(180px, 1fr));
-            gap: 12px;
+        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 14px; }
+        .result-card, .interpretation-card {
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: linear-gradient(145deg, rgba(8,20,13,.9), rgba(16,34,23,.85));
         }
+        .result-card strong { display: block; color: var(--muted); font-size: 10px; letter-spacing: .1em; margin-bottom: 8px; }
+        .result-card span { color: var(--green-bright); font-size: 23px; font-weight: 800; }
+        pre { white-space: pre-wrap; overflow-wrap: anywhere; color: #d8e8df; background: #08110c; border: 1px solid var(--border); padding: 16px; border-radius: 9px; }
+        .report-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .report-button { display: inline-block; padding: 10px 14px; background: rgba(36,139,83,.15); color: var(--green-bright); border: 1px solid var(--border-strong); border-radius: 8px; text-decoration: none; font-size: 11px; font-weight: 800; letter-spacing: .06em; }
+        .report-button:hover { background: var(--green); color: #07130c; }
+        .report-content { min-height: 200px; max-height: 700px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; }
+        .interpretation-card { margin-bottom: 12px; }
+        .interpretation-card h3 { color: var(--green-bright); margin-top: 0; }
+        .interpretation-card p { color: #d8e8df; line-height: 1.6; }
+        .interpretation-label { color: var(--muted); font-size: 12px; font-weight: 700; }
+        .interpretation-value { color: var(--green-bright); font-weight: 800; }
 
-        .result-card {
-            background: #07140f;
-            border: 1px solid #176b45;
-            padding: 15px;
-            border-radius: 5px;
+        /* Premium overview components */
+        .overview-intro { display:flex; justify-content:space-between; align-items:flex-start; gap:20px; }
+        .eyebrow { color:var(--green); font-size:10px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; }
+        .overview-intro h2 { margin:7px 0 5px; font-size:25px; letter-spacing:-.03em; color:var(--text); }
+        .overview-intro p { margin:0; color:var(--muted); }
+        .live-pill { display:inline-flex; align-items:center; gap:8px; padding:8px 11px; border:1px solid var(--border-strong); border-radius:30px; color:var(--green-bright); background:rgba(53,230,143,.07); font-size:10px; font-weight:800; letter-spacing:.1em; white-space:nowrap; }
+        .live-dot { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 12px rgba(53,230,143,.8); }
+        .stat-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:15px; margin-bottom:20px; }
+        .stat-card { position:relative; overflow:hidden; padding:20px; border:1px solid var(--border); border-radius:14px; background:linear-gradient(145deg,#14251a,#0d1711); box-shadow:0 12px 30px rgba(0,0,0,.13); }
+        .stat-card::after { content:""; position:absolute; width:100px; height:100px; right:-40px; bottom:-55px; border-radius:50%; background:rgba(53,230,143,.07); }
+        .stat-label { color:var(--muted); font-size:10px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+        .stat-value { display:block; margin:10px 0 4px; color:var(--green-bright); font-size:30px; font-weight:800; line-height:1.1; }
+        .stat-note { color:#819b8a; font-size:11px; }
+        .overview-columns { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr); gap:18px; }
+        .activity-item { display:flex; justify-content:space-between; align-items:center; gap:14px; padding:14px 0; border-bottom:1px solid var(--border); }
+        .activity-item:last-child { border-bottom:0; }
+        .activity-type { color:var(--green-bright); font-size:12px; font-weight:800; }
+        .activity-target { color:var(--text); font-size:13px; overflow-wrap:anywhere; }
+        .activity-date { color:var(--muted); font-size:11px; text-align:right; }
+        .module-link-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+        .module-link { display:block; padding:16px; border:1px solid var(--border); border-radius:10px; background:rgba(255,255,255,.018); text-decoration:none; transition:.2s; }
+        .module-link:hover { border-color:var(--border-strong); background:rgba(53,230,143,.06); transform:translateY(-2px); }
+        .module-link strong { display:block; color:var(--text); font-size:13px; }
+        .module-link span { color:var(--muted); font-size:11px; }
+        .scope-note { display:flex; align-items:center; gap:12px; padding:15px 17px; border:1px solid var(--border-strong); border-radius:11px; background:rgba(24,110,66,.10); color:#b9d9c5; font-size:12px; }
+        .scope-icon { color:var(--green-bright); font-size:19px; }
+
+        @media (max-width: 900px) {
+            body { padding:22px 16px; }
+            .stat-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+            .overview-columns { grid-template-columns:1fr; }
         }
-
-        .result-card strong {
-            display: block;
-            color: #8aab99;
-            font-size: 12px;
-            margin-bottom: 8px;
-        }
-
-        .result-card span {
-            color: #00ff88;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        pre {
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
-            color: #d8e8df;
-            background: #080d0b;
-            border: 1px solid #28523d;
-            padding: 12px;
-            border-radius: 4px;
-        }
-
-        .section-heading {
-            color: #00ff99;
-            border-bottom: 1px solid #28523d;
-            padding-bottom: 8px;
-            margin-top: 25px;
-        }
-
-        /* REPORT MANAGEMENT */
-
-        .report-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .report-button {
-            display: inline-block;
-            padding: 9px 13px;
-            background: #064e2b;
-            color: #00ff88;
-            border: 1px solid #00ff88;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .report-button:hover {
-            background: #00ff88;
-            color: #080d0b;
-        }
-
-        .report-content {
-            min-height: 200px;
-            max-height: 700px;
-            overflow: auto;
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
-            line-height: 1.6;
-        }
-
-        /* DEVELOPMENT 27.1: ANALYSIS INTERPRETATION */
-
-        .interpretation-card {
-            background: #07140f;
-            border: 1px solid #176b45;
-            padding: 16px;
-            margin-bottom: 12px;
-            border-radius: 5px;
-        }
-
-        .interpretation-card h3 {
-            color: #00ff99;
-            margin-top: 0;
-        }
-
-        .interpretation-card p {
-            color: #d8e8df;
-            line-height: 1.6;
-        }
-
-        .interpretation-label {
-            color: #8aab99;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .interpretation-value {
-            color: #00ff88;
-            font-weight: bold;
-        }
-
-        .interpretation-warning {
-            border-left: 3px solid #d6b65c;
-            background: #1b2118;
-            color: #d6b65c;
-            padding: 13px;
-            margin-top: 12px;
-            line-height: 1.6;
-        }
-
         @media (max-width: 600px) {
-            body {
-                padding: 15px;
-            }
-
-            .main-navigation {
-                justify-content: flex-start;
-                gap: 8px;
-            }
-
-            .main-navigation a {
-                font-size: 11px;
-                padding: 9px;
-            }
-
-            .header h1 {
-                font-size: 23px;
-                letter-spacing: 3px;
-            }
-
-            .panel {
-                padding: 15px;
-            }
+            body { padding:12px; }
+            .header { padding:22px 18px; flex-direction:column; align-items:flex-start; }
+            .header h1 { font-size:24px; letter-spacing:.13em; }
+            .main-navigation { gap:4px; }
+            .main-navigation a { padding:9px 10px; font-size:9px; }
+            .panel { padding:17px; }
+            .overview-intro { flex-direction:column; }
+            .overview-intro h2 { font-size:21px; }
+            .stat-grid { gap:10px; }
+            .stat-card { padding:15px; }
+            .stat-value { font-size:25px; }
+            .module-link-grid { grid-template-columns:1fr; }
+            .activity-item { align-items:flex-start; flex-direction:column; gap:4px; }
+            .activity-date { text-align:left; }
         }
     </style>
 </head>
@@ -409,70 +327,114 @@
         {% if active_page == "overview" %}
 
         <div class="panel">
+            <div class="overview-intro">
+                <div>
+                    <div class="eyebrow">Command centre / Local environment</div>
+                    <h2>Platform overview</h2>
+                    <p>Monitor your local laboratory activity and analysis workspace.</p>
+                </div>
+                <div class="live-pill"><span class="live-dot"></span> DASHBOARD ONLINE</div>
+            </div>
+        </div>
 
-            <h2 class="page-title">PLATFORM OVERVIEW</h2>
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">Reconnaissance records</div>
+                <span class="stat-value">{{ dashboard_statistics.total_reconnaissance }}</span>
+                <div class="stat-note">Saved local reconnaissance activity</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Web analyses</div>
+                <span class="stat-value">{{ dashboard_statistics.total_web_analyses }}</span>
+                <div class="stat-note">Saved web analysis records</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Generated reports</div>
+                <span class="stat-value">{{ dashboard_statistics.total_reports }}</span>
+                <div class="stat-note">Reports available in local storage</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total analyses</div>
+                <span class="stat-value">{{ dashboard_statistics.total_reconnaissance + dashboard_statistics.total_web_analyses }}</span>
+                <div class="stat-note">Combined saved analysis records</div>
+            </div>
+        </div>
 
-            <p>Welcome to ROGUEPULSE.</p>
+        <div class="overview-columns">
+            <div class="panel">
+                <h2>RECENT ACTIVITY</h2>
+                {% if dashboard_statistics.latest_activity %}
+                <div class="activity-item">
+                    <div>
+                        <div class="activity-type">{{ dashboard_statistics.latest_activity[0] }}</div>
+                        <div class="activity-target">{{ dashboard_statistics.latest_activity[1] }}</div>
+                    </div>
+                    <div class="activity-date">{{ dashboard_statistics.latest_activity[2] }}</div>
+                </div>
+                <p class="muted">Most recent saved activity across reconnaissance and web analysis.</p>
+                {% else %}
+                <p class="muted">No analysis activity has been recorded yet. Run a local laboratory analysis to see activity here.</p>
+                {% endif %}
+            </div>
 
-            <p>
-                Automated Cybersecurity Learning and
-                Local Laboratory Analysis Platform.
-            </p>
-
+            <div class="panel">
+                <h2>QUICK ACCESS</h2>
+                <div class="module-link-grid">
+                    <a class="module-link" href="/reconnaissance">
+                        <strong>01 / Reconnaissance</strong>
+                        <span>Inspect local HTTP metadata</span>
+                    </a>
+                    <a class="module-link" href="/web-analysis">
+                        <strong>02 / Web analysis</strong>
+                        <span>Review page structure and headers</span>
+                    </a>
+                    <a class="module-link" href="/history">
+                        <strong>03 / History</strong>
+                        <span>Browse saved records</span>
+                    </a>
+                    <a class="module-link" href="/reports">
+                        <strong>04 / Reports</strong>
+                        <span>View and download reports</span>
+                    </a>
+                </div>
+            </div>
         </div>
 
         <div class="panel">
-
             <h2>SYSTEM STATUS</h2>
-
-            <p>Engine: {{ engine_status }}</p>
-
-            <p>Testing scope: LOCAL LABORATORIES ONLY</p>
-
-            <p>Dashboard: ONLINE</p>
-
+            <div class="result-grid">
+                <div class="result-card">
+                    <strong>ENGINE</strong>
+                    <span>{{ engine_status }}</span>
+                </div>
+                <div class="result-card">
+                    <strong>DASHBOARD</strong>
+                    <span>ONLINE</span>
+                </div>
+                <div class="result-card">
+                    <strong>TESTING SCOPE</strong>
+                    <span>LOCAL ONLY</span>
+                </div>
+            </div>
         </div>
 
         <div class="panel">
-
             <h2>TARGET VALIDATION</h2>
-
+            <p class="muted">Validate that a target belongs to the approved local laboratory scope.</p>
             <form method="POST" action="/">
-
-                <label for="target">
-                    Enter a local laboratory URL:
-                </label>
-
-                <input type="text" id="target" name="target" placeholder="http://127.0.0.1:8000" value="{{ target }}"
-                    required>
-
-                <button type="submit">
-                    VALIDATE TARGET
-                </button>
-
+                <label for="target">Local laboratory URL</label>
+                <input type="text" id="target" name="target" placeholder="http://127.0.0.1:8000" value="{{ target }}" required>
+                <button type="submit">VALIDATE TARGET</button>
             </form>
-
             {% if result %}
-
-            <h3 class="{{ 'approved' if result.status == 'APPROVED' else 'rejected' }}">
-                {{ result.status }}
-            </h3>
-
+            <h3 class="{{ 'approved' if result.status == 'APPROVED' else 'rejected' }}">{{ result.status }}</h3>
             <p>{{ result.message }}</p>
-
             {% endif %}
-
         </div>
 
-        <div class="panel">
-
-            <h2>PLATFORM MODULES</h2>
-
-            <p>[01] Reconnaissance</p>
-            <p>[02] Web Analysis</p>
-            <p>[03] Vulnerability Testing</p>
-            <p>[04] Laboratory Testing</p>
-
+        <div class="scope-note">
+            <span class="scope-icon">◈</span>
+            <span><strong>Scope protection active.</strong> ROGUEPULSE is designed for authorized localhost laboratory testing only.</span>
         </div>
 
         <!-- RECONNAISSANCE PAGE -->

@@ -249,12 +249,14 @@ def get_valid_report_path(filename):
 # OVERVIEW
 # --------------------------------------------------
 
+
 @app.route("/", methods=["GET", "POST"])
 def dashboard():
 
     result = None
     target = ""
 
+    # Handle target validation
     if request.method == "POST":
 
         target = request.form.get("target", "").strip()
@@ -277,12 +279,36 @@ def dashboard():
 
             logger.warning("Dashboard rejected a target.")
 
+    # Retrieve dashboard statistics
+    try:
+
+        dashboard_statistics = database.get_dashboard_statistics()
+
+        dashboard_statistics["total_reports"] = len(
+            get_available_reports()
+        )
+
+    except Exception:
+
+        logger.exception(
+            "Unable to retrieve dashboard statistics."
+        )
+
+        dashboard_statistics = {
+            "total_reconnaissance": 0,
+            "total_web_analyses": 0,
+            "total_reports": 0,
+            "latest_activity": None
+        }
+
+    # Render dashboard
     return render_template(
         "index.html",
         **dashboard_context(
             result=result,
             target=target,
-            active_page="overview"
+            active_page="overview",
+            dashboard_statistics=dashboard_statistics
         )
     )
 

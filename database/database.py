@@ -223,3 +223,59 @@ class RoguePulseDatabase:
             """, (analysis_id,))
 
             return cursor.fetchone()
+
+    
+    def get_dashboard_statistics(self):
+        """Retrieve database statistics for the dashboard."""
+
+        with self.connect() as connection:
+            cursor = connection.cursor()
+
+            # Total reconnaissance records
+            cursor.execute("""
+                SELECT COUNT(*)
+                FROM reconnaissance
+            """)
+
+            total_reconnaissance = cursor.fetchone()[0]
+
+            # Total web analysis records
+            cursor.execute("""
+                SELECT COUNT(*)
+                FROM web_analysis
+            """)
+
+            total_web_analyses = cursor.fetchone()[0]
+
+            # Most recent activity across both analysis tables
+            cursor.execute("""
+                SELECT activity_type, target, activity_date
+                FROM (
+                    SELECT
+                        'Reconnaissance' AS activity_type,
+                        target,
+                        scan_date AS activity_date,
+                        id
+                    FROM reconnaissance
+
+                    UNION ALL
+
+                    SELECT
+                        'Web Analysis' AS activity_type,
+                        target,
+                        analysis_date AS activity_date,
+                        id
+                    FROM web_analysis
+                )
+                ORDER BY activity_date DESC, id DESC
+                LIMIT 1
+            """)
+
+            latest_activity = cursor.fetchone()
+
+            return {
+                "total_reconnaissance": total_reconnaissance,
+                "total_web_analyses": total_web_analyses,
+                "latest_activity": latest_activity
+            }
+    
